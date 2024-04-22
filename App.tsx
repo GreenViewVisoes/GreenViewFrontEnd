@@ -3,7 +3,9 @@ import {
   Rubik_400Regular,
   Rubik_700Bold,
 } from "@expo-google-fonts/rubik";
-import { Login } from "@screens/Login";
+
+import { Routes } from "./src/routes";
+import { Loading } from "@components/Loading";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -11,5 +13,5 @@ export default function App() {
     Rubik_700Bold,
   });
 
-  return <Login />;
+  return !fontsLoaded ? <Loading /> : <Routes />;
 }
