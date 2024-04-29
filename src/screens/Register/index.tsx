@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import loginLogo from "@assets/logo-login.png";
 
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useNavigation } from "@react-navigation/native";
 
 export default function Register() {
@@ -24,14 +26,14 @@ export default function Register() {
 
   return (
     <ScrollView className="flex-1 bg-[#E5E5E5] ">
-      <View className="items-center justify-center gap-2">
+      <SafeAreaView className="items-center justify-center gap-2">
         <Image className="w-64 h-64" resizeMode="contain" source={loginLogo} />
         <View className="gap-1">
           <Text className="text-xl text-[#404040]">Nome</Text>
           <TextInput
             placeholder="Seu Nome"
             enterKeyHint="next"
-            className="bg-[#FFFFFF] h-14 w-72 p-3 rounded-xl"
+            className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl"
           ></TextInput>
         </View>
         <View className="gap-1">
@@ -39,7 +41,7 @@ export default function Register() {
           <TextInput
             placeholder="exemplo@gmail.com"
             enterKeyHint="next"
-            className="bg-[#FFFFFF] h-14 w-72 p-3 rounded-xl"
+            className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl"
           ></TextInput>
         </View>
         <View className="gap-1">
@@ -48,7 +50,7 @@ export default function Register() {
             placeholder="Senha"
             secureTextEntry={true}
             enterKeyHint="next"
-            className="bg-[#FFFFFF] h-14 w-72 p-3 rounded-xl"
+            className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl"
           ></TextInput>
         </View>
         <View className="gap-1">
@@ -57,7 +59,7 @@ export default function Register() {
             placeholder="Confirme a senha"
             secureTextEntry={true}
             enterKeyHint="done"
-            className="bg-[#FFFFFF] h-14 w-72 p-3 rounded-xl"
+            className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl"
           ></TextInput>
         </View>
         <View className="gap-2">
@@ -71,7 +73,7 @@ export default function Register() {
             <Text className="text-[#FFFFFF] text-lg">Entrar</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </ScrollView>
   );
 }

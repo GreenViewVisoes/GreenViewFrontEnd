@@ -5,7 +5,7 @@ import Register from "@screens/Register";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
-export function AppRoutes() {
+export function AuthRoutes() {
   return (
     <Navigator
       initialRouteName="login"
@@ -14,7 +14,6 @@ export function AppRoutes() {
       }}
     >
       <Screen name="login" component={Login} />
-      <Screen name="home" component={Home} />
       <Screen name="register" component={Register} />
     </Navigator>
   );

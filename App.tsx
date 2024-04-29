@@ -6,6 +6,7 @@ import {
 
 import { Routes } from "./src/routes";
 import { Loading } from "@components/Loading";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
