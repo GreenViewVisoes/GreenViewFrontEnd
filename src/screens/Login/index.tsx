@@ -44,17 +44,20 @@ export function Login() {
       </View>
 
       <View className="gap-2">
-        <Pressable onPress={() => handleCadastro()}>
-          <Text className="text-[#404040] text-lg font-rubikRegular">
-            Esqueceu sua senha?
-          </Text>
-        </Pressable>
-        <TouchableOpacity
+        <Pressable
           onPress={() => HandleLogin()}
-          className="w-72 h-14 items-center rounded-xl justify-center font-rubikRegular bg-[#0C632E]"
+          className="w-72 h-14 items-center rounded-xl justify-center font-rubikRegular bg-main"
         >
           <Text className="text-[#FFFFFF] text-lg">Entrar</Text>
-        </TouchableOpacity>
+        </Pressable>
+        <Pressable
+          className="w-72 h-14 items-center rounded-xl justify-center border-2 border-main"
+          onPress={() => handleCadastro()}
+        >
+          <Text className="text-main text-lg font-rubikRegular">
+            Me cadastrar
+          </Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

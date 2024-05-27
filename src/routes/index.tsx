@@ -7,7 +7,7 @@ export function Routes() {
   return (
     <View className="flex-1 bg-background">
       <NavigationContainer>
-        <BottomRoutes />
+        <AuthRoutes />
       </NavigationContainer>
     </View>
   );
