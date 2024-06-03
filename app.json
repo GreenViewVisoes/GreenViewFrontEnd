@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#E5E5E5"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -21,13 +19,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#E5E5E5"
-      }
+      },
+      "package": "com.greenview.greenview"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "6c75313f-84c6-450e-a6a5-fa137b6ad47d"
+      }
+    }
   }
 }

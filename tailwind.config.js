@@ -12,6 +12,7 @@ module.exports = {
     colors: {
       "main": "#0C632E",
       "background": "#E5E5E5",
+      "error": "#FF0000",
     }
   },
   plugins: [],

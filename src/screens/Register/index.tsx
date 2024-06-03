@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -7,9 +8,11 @@ import {
   View,
 } from "react-native";
 
-import axios from "axios";
-
 import * as yup from "yup";
+
+import { api } from "src/service/api";
+
+import axios from "axios";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -18,6 +21,8 @@ import { useForm, Controller } from "react-hook-form";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { AppError } from "@utils/AppError";
+import Toast from "react-native-toast-message";
 
 type formDataProps = {
   name: string;
@@ -50,23 +55,32 @@ export default function Register() {
 
   const navigation = useNavigation();
 
-  const onSubmit = (data: formDataProps) => {
-    const { name, email, password } = data;
-
-    console.log(data);
-    axios
-      .post("http://192.168.100.20:8000/users/", {
+  async function onSubmit({ name, email, password }: formDataProps) {
+    try {
+      const response = await api.post("/users", {
         nome: name,
         email,
         senha: password,
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
       });
-  };
+
+      Toast.show({
+        type: "success",
+        text1: "Cadastro realizado com sucesso",
+        text2: "Clique aqui para fazer login",
+        onPress: () => navigation.navigate("login"),
+      });
+    } catch (err) {
+      const isAppError = err instanceof AppError;
+      Toast.show({
+        type: "error",
+
+        text1: isAppError ? err.message : "Erro no servidor",
+        text2: isAppError
+          ? "Verifique as informações e tente novamente"
+          : "Tente novamente mais tarde",
+      });
+    }
+  }
 
   function handleLogin() {
     navigation.goBack();
@@ -81,7 +95,7 @@ export default function Register() {
       <SafeAreaView className="items-center justify-center gap-2 mb-6">
         <Image className="w-64 h-64" resizeMode="contain" source={loginLogo} />
         <View>
-          <Text className="text-xl text-[#404040]">Nome</Text>
+          <Text className="text-xl mb-2 text-[#404040]">Nome</Text>
 
           <Controller
             control={control}
@@ -89,7 +103,6 @@ export default function Register() {
             render={({ field: { onChange, value } }) => (
               <TextInput
                 onChangeText={onChange}
-                placeholder="Seu Nome"
                 enterKeyHint="next"
                 value={value}
                 className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl mb-3"
@@ -98,13 +111,13 @@ export default function Register() {
           />
 
           {errors.name && (
-            <Text className="text-red-500 text-main">
+            <Text className="text-red-500 text-error">
               {errors.name?.message}
             </Text>
           )}
         </View>
         <View>
-          <Text className="text-xl text-[#404040]">Email</Text>
+          <Text className="text-xl mb-2 text-[#404040]">Email</Text>
 
           <Controller
             control={control}
@@ -113,7 +126,6 @@ export default function Register() {
               <TextInput
                 onChangeText={onChange}
                 value={value}
-                placeholder="exemplo@gmail.com"
                 enterKeyHint="next"
                 className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl mb-3"
               />
@@ -121,13 +133,13 @@ export default function Register() {
           />
 
           {errors.email && (
-            <Text className="text-red-500 text-main">
+            <Text className="text-red-500 text-error">
               {errors.email?.message}
             </Text>
           )}
         </View>
         <View>
-          <Text className="text-xl text-[#404040]">Senha</Text>
+          <Text className="text-xl mb-2 text-[#404040]">Senha</Text>
 
           <Controller
             control={control}
@@ -136,7 +148,6 @@ export default function Register() {
               <TextInput
                 onChangeText={onChange}
                 value={value}
-                placeholder="Senha"
                 secureTextEntry={true}
                 enterKeyHint="next"
                 className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl mb-3"
@@ -145,13 +156,13 @@ export default function Register() {
           />
 
           {errors.password && (
-            <Text className="text-red-500 text-main">
+            <Text className="text-red-500 text-error">
               {errors.password?.message}
             </Text>
           )}
         </View>
         <View>
-          <Text className="text-xl text-[#404040]">Confirmar Senha</Text>
+          <Text className="text-xl mb-2 text-[#404040]">Confirmar Senha</Text>
 
           <Controller
             control={control}
@@ -160,7 +171,6 @@ export default function Register() {
               <TextInput
                 onChangeText={onChange}
                 value={value}
-                placeholder="Confirme a senha"
                 secureTextEntry={true}
                 enterKeyHint="done"
                 className="bg-[#FFFFFF] text-lg h-14 w-72 p-3 rounded-xl mb-3"
@@ -171,7 +181,7 @@ export default function Register() {
           />
 
           {errors.passwordConfirm && (
-            <Text className="text-red-500 text-main">
+            <Text className="text-red-500 text-error">
               {errors.passwordConfirm?.message}
             </Text>
           )}
@@ -181,7 +191,7 @@ export default function Register() {
             onPress={handleSubmit(onSubmit)}
             className="w-72 h-14 items-center rounded-xl justify-center active:opacity-90 bg-[#0C632E]"
           >
-            <Text className="text-[#FFFFFF] text-lg">Criar e Acessar</Text>
+            <Text className="text-[#FFFFFF] text-lg">Criar</Text>
           </Pressable>
 
           <Pressable

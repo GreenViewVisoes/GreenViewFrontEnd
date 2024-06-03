@@ -4,9 +4,12 @@ import {
   Rubik_700Bold,
 } from "@expo-google-fonts/rubik";
 
+import { AuthContextProvider } from "@contexts/AuthContext";
+
 import { Routes } from "./src/routes";
 import { Loading } from "@components/Loading";
-import { SafeAreaView } from "react-native-safe-area-context";
+
+import Toast from "react-native-toast-message";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -14,5 +17,16 @@ export default function App() {
     Rubik_700Bold,
   });
 
-  return !fontsLoaded ? <Loading /> : <Routes />;
+  return (
+    <AuthContextProvider>
+      {!fontsLoaded ? (
+        <Loading />
+      ) : (
+        <>
+          <Routes />
+          <Toast />
+        </>
+      )}
+    </AuthContextProvider>
+  );
 }

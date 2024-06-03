@@ -5,15 +5,10 @@ import {
 
 import { Camera } from "@screens/Camera/Index";
 import { Home } from "@screens/Home";
-import { Pests } from "@screens/Pests";
 import { Profile } from "@screens/Profile";
 import { Reports } from "@screens/Reports";
 
-import HomeIcon from "@assets/home.svg";
-import ReportsIcon from "@assets/report.svg";
-import CameraIcon from "@assets/camera.svg";
-import ProfileIcon from "@assets/profile.svg";
-import PestsIcon from "@assets/pest.svg";
+import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
 
 type AppRoutes = {
   home: undefined;
@@ -33,6 +28,13 @@ export function BottomRoutes() {
       initialRouteName="home"
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: "#0C632E",
+        tabBarInactiveTintColor: "#A5A5A5",
+        tabBarStyle: {
+          backgroundColor: "#FFFFFF",
+          height: 80,
+        },
       }}
     >
       <Screen
@@ -40,7 +42,7 @@ export function BottomRoutes() {
         component={Home}
         options={{
           tabBarIcon: ({ color }) => (
-            <HomeIcon fill={color} width={24} height={24} />
+            <FontAwesome6Icon name={"house"} color={color} size={30} />
           ),
           tabBarLabel: "Home",
         }}
@@ -50,7 +52,7 @@ export function BottomRoutes() {
         component={Reports}
         options={{
           tabBarIcon: ({ color }) => (
-            <ReportsIcon fill={color} width={24} height={24} />
+            <FontAwesome6Icon name={"chart-simple"} color={color} size={30} />
           ),
           tabBarLabel: "Relatórios",
         }}
@@ -60,27 +62,18 @@ export function BottomRoutes() {
         component={Camera}
         options={{
           tabBarIcon: ({ color }) => (
-            <CameraIcon fill={color} width={24} height={24} />
+            <FontAwesome6Icon name={"camera"} color={color} size={30} />
           ),
           tabBarLabel: "Câmera",
         }}
       />
-      <Screen
-        name="pests"
-        component={Pests}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <PestsIcon fill={color} width={24} height={24} />
-          ),
-          tabBarLabel: "Pragas",
-        }}
-      />
+
       <Screen
         name="profile"
         component={Profile}
         options={{
           tabBarIcon: ({ color }) => (
-            <ProfileIcon fill={color} width={24} height={24} />
+            <FontAwesome6Icon name={"user"} color={color} size={30} solid />
           ),
           tabBarLabel: "Perfil",
         }}
