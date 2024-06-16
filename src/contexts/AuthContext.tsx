@@ -60,6 +60,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
           },
         }
       );
+
       if (response.data) {
         setIsLoadingUserStorageData(true);
 

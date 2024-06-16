@@ -12,8 +12,6 @@ import * as yup from "yup";
 
 import { api } from "src/service/api";
 
-import axios from "axios";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import loginLogo from "@assets/logo-login.png";
@@ -91,7 +89,11 @@ export default function Register() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-[#E5E5E5] ">
+    <ScrollView
+      className="flex-1 bg-[#E5E5E5]"
+      alwaysBounceVertical={false}
+      showsVerticalScrollIndicator={false}
+    >
       <SafeAreaView className="items-center justify-center gap-2 mb-6">
         <Image className="w-64 h-64" resizeMode="contain" source={loginLogo} />
         <View>

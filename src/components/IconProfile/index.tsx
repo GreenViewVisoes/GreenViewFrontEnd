@@ -1,12 +1,12 @@
 import { Image, View } from "react-native";
 
-export default function IconProfile() {
+export default function IconProfile({ url }: { url: string }) {
   return (
     <Image
-      src="https://via.placeholder.com/150"
+      src={url}
       style={{ width: 150, height: 150 }}
       resizeMode="contain"
-      className="rounded-full w-36 h-36"
+      className="rounded-full w-36 h-36 m-3"
     />
   );
 }
