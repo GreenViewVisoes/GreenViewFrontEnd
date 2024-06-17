@@ -1,5 +1,6 @@
 import IconProfile from "@components/IconProfile";
 import {
+  ActivityIndicator,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -42,7 +43,9 @@ const changeProfile = yup.object({
 });
 
 export function Profile() {
-  const { AuthUser } = useAuth();
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const { AuthUser, updateUserProfile } = useAuth();
 
   const [photo, setPhoto] = useState<string>("https://via.placeholder.com/150");
   const {
@@ -81,11 +84,18 @@ export function Profile() {
 
   async function onSubmit({ name, email, senha }: formDataProps) {
     try {
-      const response = await api.put("/users", {
+      setIsUpdating(true);
+      const userUpdated = AuthUser;
+
+      userUpdated.nome = name;
+
+      await api.put("/users", {
         nome: name,
-        email,
+        // email,
         senha: senha || undefined,
       });
+
+      await updateUserProfile(userUpdated);
 
       Toast.show({
         type: "success",
@@ -97,6 +107,8 @@ export function Profile() {
         text1: "Erro ao alterar suas informações",
         text2: "Tente novamente mais tarde",
       });
+    } finally {
+      setIsUpdating(false);
     }
   }
 
@@ -204,9 +216,14 @@ export function Profile() {
           </View>
           <Pressable
             onPress={handleSubmit(onSubmit)}
+            disabled={isUpdating}
             className="w-72 h-14 items-center rounded-xl justify-center active:opacity-90 bg-[#0C632E]"
           >
-            <Text className="text-[#FFFFFF] text-lg">Editar</Text>
+            {isUpdating ? (
+              <ActivityIndicator size="large" color="#FFFFFF" />
+            ) : (
+              <Text className="text-[#FFFFFF] text-lg">Editar</Text>
+            )}
           </Pressable>
         </View>
       </SafeAreaView>

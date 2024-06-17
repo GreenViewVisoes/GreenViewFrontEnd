@@ -11,6 +11,7 @@ import { api } from "src/service/api";
 
 export type AuthContextDataProps = {
   AuthUser: AuthDTO;
+  updateUserProfile: (userUpdated: AuthDTO) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   isLoadingUserStorageData: boolean;
@@ -110,6 +111,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function updateUserProfile(userUpdated: AuthDTO) {
+    try {
+      setAuthUser(userUpdated);
+      await storageAuthSave(userUpdated);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   useEffect(() => {
     loadAuthUser();
   }, []);
@@ -118,6 +128,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     <AuthContext.Provider
       value={{
         AuthUser,
+        updateUserProfile,
         signIn,
         signOut,
         isLoadingUserStorageData,
