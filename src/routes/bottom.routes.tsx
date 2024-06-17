@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 
-import { Camera } from "@screens/Camera/Index";
+import { CameraPage } from "@screens/Camera/Index";
 import { Home } from "@screens/Home";
 import { Profile } from "@screens/Profile";
 import { Reports } from "@screens/Reports";
@@ -59,7 +59,7 @@ export function BottomRoutes() {
       />
       <Screen
         name="camera"
-        component={Camera}
+        component={CameraPage}
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome6Icon name={"camera"} color={color} size={30} />
