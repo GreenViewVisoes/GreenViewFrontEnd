@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/bottom-tabs";
 
 import { CameraPage } from "@screens/Camera/Index";
+import { Details, DetailsProps } from "@screens/Details";
 import { Home } from "@screens/Home";
 import { Profile } from "@screens/Profile";
 import { Reports } from "@screens/Reports";
@@ -16,6 +17,7 @@ type AppRoutes = {
   camera: undefined;
   profile: undefined;
   pests: undefined;
+  details: DetailsProps;
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -77,6 +79,12 @@ export function BottomRoutes() {
           ),
           tabBarLabel: "Perfil",
         }}
+      />
+
+      <Screen
+        name="details"
+        component={Details}
+        options={{ tabBarButton: () => null }}
       />
     </Navigator>
   );

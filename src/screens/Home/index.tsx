@@ -15,9 +15,35 @@ import SearchInput from "@components/SearchInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@hooks/useAuth";
 import { CardHome } from "@components/CardHome";
+import { useForegroundPermissions } from "expo-location";
+import { useEffect } from "react";
 
 export function Home() {
   const { AuthUser, signOut } = useAuth();
+  const [locationForegroundPermission, requestLocationForegroundPermission] =
+    useForegroundPermissions();
+
+  useEffect(() => {
+    requestLocationForegroundPermission();
+  }, []);
+
+  if (!locationForegroundPermission?.granted) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-[#0C632E]">
+        <View className="flex flex-col items-center justify-center gap-3">
+          <Text className="text-background text-lg text-center">
+            Precisamos de sua permissão para acessar a localização
+          </Text>
+          <Pressable
+            className="bg-[#059A3F] w-1/2 h-12 rounded-md items-center justify-center"
+            onPress={requestLocationForegroundPermission}
+          >
+            <Text className="text-background text-lg">Conceder Permissão</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 items-center justify-around bg-[#0C632E] gap-2">

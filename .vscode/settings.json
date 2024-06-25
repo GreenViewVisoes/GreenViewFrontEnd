@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["dtos", "Usuario"]
+  "cSpell.words": ["dtos", "Usuario"],
+  "java.compile.nullAnalysis.mode": "disabled"
 }
