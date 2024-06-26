@@ -8,6 +8,12 @@ import {
   storageAuthRemove,
 } from "@storage/storageAuthUser";
 import { api } from "src/service/api";
+import { ConsultasDTO } from "@dtos/Consultas.DTO";
+import {
+  storageConsultasGet,
+  storageConsultasSave,
+  storageCosultasRemove,
+} from "@storage/storageConsultas";
 
 export type AuthContextDataProps = {
   AuthUser: AuthDTO;
@@ -15,6 +21,9 @@ export type AuthContextDataProps = {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   isLoadingUserStorageData: boolean;
+  saveConsultas: (consultas: ConsultasDTO[]) => Promise<void>;
+  getConsultas: () => Promise<ConsultasDTO[]>;
+  storageCosultasRemove: () => Promise<void>;
 };
 
 type AuthContextProviderProps = {
@@ -120,9 +129,31 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function saveConsultas(consultas: ConsultasDTO[]) {
+    await storageConsultasSave(consultas);
+  }
+
+  async function getConsultas() {
+    const consultas = await storageConsultasGet();
+
+    return consultas;
+  }
+
+  async function removeConsultas() {
+    await storageCosultasRemove();
+  }
+
   useEffect(() => {
     loadAuthUser();
   }, []);
+
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+
+    return () => {
+      subscribe();
+    };
+  }, [signOut]);
 
   return (
     <AuthContext.Provider
@@ -132,6 +163,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         signIn,
         signOut,
         isLoadingUserStorageData,
+        getConsultas,
+        saveConsultas,
+        storageCosultasRemove,
       }}
     >
       {children}

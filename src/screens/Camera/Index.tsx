@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Loading } from "@components/Loading";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, SafeAreaView, Text, View } from "react-native";
 import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
 import * as ImagePicker from "expo-image-picker";
 import { api } from "src/service/api";
@@ -15,8 +15,9 @@ import {
 import Toast from "react-native-toast-message";
 import { AppError } from "@utils/AppError";
 import { useNavigation } from "@react-navigation/native";
-import { DetailsProps } from "@screens/Details";
+
 import { AppNavigatorRoutesProps } from "src/routes/bottom.routes";
+import { ConsultasDTO } from "@dtos/Consultas.DTO";
 
 export function CameraPage() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -47,6 +48,24 @@ export function CameraPage() {
       return () => subscription?.remove();
     }
   }, [locationForegroundPermission]);
+
+  if (!locationForegroundPermission?.granted) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-[#0C632E]">
+        <View className="flex flex-col items-center justify-center gap-3">
+          <Text className="text-background text-lg text-center">
+            Precisamos de sua permissão para acessar a localização
+          </Text>
+          <Pressable
+            className="bg-[#059A3F] w-1/2 h-12 rounded-md items-center justify-center"
+            onPress={requestLocationForegroundPermission}
+          >
+            <Text className="text-background text-lg">Conceder Permissão</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   if (!permission) {
     return <Loading />;
@@ -100,7 +119,7 @@ export function CameraPage() {
           },
         });
 
-        const { image, consulta } = response.data as DetailsProps;
+        const { image, consulta } = response.data as ConsultasDTO;
 
         navigation.navigate("details", {
           image: image,
@@ -161,7 +180,7 @@ export function CameraPage() {
         },
       });
 
-      const { image, consulta } = response.data as DetailsProps;
+      const { image, consulta } = response.data as ConsultasDTO;
 
       navigation.navigate("details", {
         image: image,

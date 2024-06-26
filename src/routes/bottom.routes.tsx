@@ -1,10 +1,11 @@
+import { ConsultasDTO } from "@dtos/Consultas.DTO";
 import {
   BottomTabNavigationProp,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 
 import { CameraPage } from "@screens/Camera/Index";
-import { Details, DetailsProps } from "@screens/Details";
+import { Details } from "@screens/Details";
 import { Home } from "@screens/Home";
 import { Profile } from "@screens/Profile";
 import { Reports } from "@screens/Reports";
@@ -17,7 +18,7 @@ type AppRoutes = {
   camera: undefined;
   profile: undefined;
   pests: undefined;
-  details: DetailsProps;
+  details: ConsultasDTO;
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;

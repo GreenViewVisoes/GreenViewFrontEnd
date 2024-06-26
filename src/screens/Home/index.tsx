@@ -11,37 +11,53 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 import icon from "@assets/icon.png";
 import SearchInput from "@components/SearchInput";
-
+import { useFocusEffect } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@hooks/useAuth";
 import { CardHome } from "@components/CardHome";
-import { useForegroundPermissions } from "expo-location";
-import { useEffect } from "react";
+import { api } from "src/service/api";
+import { AppError } from "@utils/AppError";
+import Toast from "react-native-toast-message";
+import { useCallback, useState } from "react";
+import { ConsultasDTO } from "@dtos/Consultas.DTO";
+import { storageAuthRemove } from "@storage/storageConsultas";
 
 export function Home() {
-  const { AuthUser, signOut } = useAuth();
-  const [locationForegroundPermission, requestLocationForegroundPermission] =
-    useForegroundPermissions();
+  const { AuthUser, signOut, saveConsultas, getConsultas } = useAuth();
+  const [consultas, setConsultas] = useState<ConsultasDTO[]>([]);
+  const [recentes, setRecentes] = useState<ConsultasDTO[]>([]);
 
-  useEffect(() => {
-    requestLocationForegroundPermission();
-  }, []);
+  async function fetchConsultas() {
+    try {
+      const response = await api.get("/consultas");
+      const consultasRecentes = await getConsultas();
 
-  if (!locationForegroundPermission?.granted) {
+      setRecentes(consultasRecentes);
+      setConsultas(response.data);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError ? error.message : "Erro ao buscar consultas";
+
+      Toast.show({
+        type: "error",
+        text1: title,
+        text2: isAppError ? "" : "Tente novamente mais tarde",
+      });
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchConsultas();
+    }, [])
+  );
+
+  function handleListEmpty() {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-[#0C632E]">
-        <View className="flex flex-col items-center justify-center gap-3">
-          <Text className="text-background text-lg text-center">
-            Precisamos de sua permissão para acessar a localização
-          </Text>
-          <Pressable
-            className="bg-[#059A3F] w-1/2 h-12 rounded-md items-center justify-center"
-            onPress={requestLocationForegroundPermission}
-          >
-            <Text className="text-background text-lg">Conceder Permissão</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
+      <View className="flex justify-center items-center min-w-full h-full">
+        <Text className="text-base">Nenhum dado encontrado</Text>
+      </View>
     );
   }
 
@@ -56,7 +72,7 @@ export function Home() {
           </Text>
         </View>
         <View className="items-center justify-end flex-1 gap-3">
-          <Pressable className="h-auto w-auto " onPress={signOut}>
+          <Pressable className="h-auto w-auto" onPress={signOut}>
             <FontAwesome6
               name={"right-from-bracket"}
               size={20}
@@ -75,44 +91,24 @@ export function Home() {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           centerContent={true}
-          data={[
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-          ]}
+          ListEmptyComponent={handleListEmpty}
+          data={consultas}
+          keyExtractor={(item) => item.consulta.idconsulta.toString()}
+          className="flex h-44 rounded-md"
           renderItem={({ item }) => (
-            <CardHome data={item.data} cultura={item.cultura} />
+            <CardHome
+              data={item.consulta.data_criacao
+                .split("T")[0]
+                .split("-")
+                .reverse()
+                .join("/")}
+              cultura={"Soja"}
+              img={item.image.imagem_com_fundo}
+              key={item.consulta.idconsulta}
+              consultasData={item}
+            />
           )}
-        ></FlatList>
+        />
         {/* mudar para flatlist para otimizar a renderização */}
         <Text className="text-3xl text-[#252525] m-2 font-rubikRegular mt-6">
           Recentes
@@ -121,44 +117,23 @@ export function Home() {
           horizontal={true}
           decelerationRate={"fast"}
           showsHorizontalScrollIndicator={false}
-          data={[
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-            {
-              data: "12/09/2021",
-              cultura: "Milho",
-            },
-          ]}
+          keyExtractor={(item) => item.consulta.idconsulta.toString()}
+          data={recentes ? recentes : []}
+          className="flex h-44 rounded-md "
           renderItem={({ item }) => (
-            <CardHome data={item.data} cultura={item.cultura} />
+            <CardHome
+              data={item.consulta.data_criacao
+                .split("T")[0]
+                .split("-")
+                .reverse()
+                .join("/")}
+              cultura={"Soja"}
+              img={item.image.imagem_com_fundo}
+              key={item.consulta.idconsulta}
+              consultasData={item}
+            />
           )}
-        ></FlatList>
+        />
       </ScrollView>
     </SafeAreaView>
   );

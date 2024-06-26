@@ -9,41 +9,10 @@ import {
   Text,
   View,
 } from "react-native";
-import Toast from "react-native-toast-message";
 import { AppNavigatorRoutesProps } from "src/routes/bottom.routes";
 import { api } from "src/service/api";
 import { blobToDataURL } from "blob-util";
-
-export type DetailsProps = {
-  consulta: consulta;
-  image: image;
-};
-
-export type image = {
-  id_image: number;
-  imagem_com_fundo: string;
-  imagem_sem_fundo: string;
-  imagem_mascara_verde: string;
-  imagem_mascara_amarela: string;
-  imagem_mascara_marrom: string;
-  data_envio: string;
-  status: string;
-  percent_green_mask: number;
-  percent_yellow_mask: number;
-  percent_brown_mask: number;
-  area_total: number;
-};
-
-export type consulta = {
-  idimage: number;
-  idpest: number | null;
-  iduser: number;
-  grauconfianca: number;
-  localizacao: string | null;
-  parametrosretornoia: string;
-  data_criacao: string;
-  idconsulta: number;
-};
+import { ConsultasDTO } from "@dtos/Consultas.DTO";
 
 export function Details() {
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +29,7 @@ export function Details() {
 
   const route = useRoute();
 
-  const { consulta, image } = route.params as DetailsProps;
+  const { consulta, image } = route.params as ConsultasDTO;
 
   function handleButtonClick() {
     navigation.navigate("home");
