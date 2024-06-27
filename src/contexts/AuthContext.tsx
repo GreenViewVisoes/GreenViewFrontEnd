@@ -68,7 +68,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
     try {
       const response = await axios.post(
-        "http://192.168.100.20:8000/users/login",
+        "https://d791-2804-1e68-c609-ca73-c48-f97-8717-361c.ngrok-free.app/users/login",
         data,
         {
           headers: {
