@@ -9,7 +9,7 @@ type APIInstance = AxiosInstance & {
 };
 
 const api = axios.create({
-  baseURL: "https://d791-2804-1e68-c609-ca73-c48-f97-8717-361c.ngrok-free.app",
+  baseURL: "https://organic-relative-anemone.ngrok-free.app",
 }) as APIInstance;
 
 api.registerInterceptTokenManager = (singOut) => {

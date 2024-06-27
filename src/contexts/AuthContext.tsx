@@ -68,7 +68,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
     try {
       const response = await axios.post(
-        "https://d791-2804-1e68-c609-ca73-c48-f97-8717-361c.ngrok-free.app/users/login",
+        "https://organic-relative-anemone.ngrok-free.app/users/login",
         data,
         {
           headers: {
