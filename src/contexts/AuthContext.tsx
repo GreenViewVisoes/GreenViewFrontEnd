@@ -51,6 +51,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       nome: data.nome,
       access_token: data.access_token,
       token_type: data.token_type,
+      quantidade_consultas: 0,
+      plants_counts: {
+        potassio: 0,
+        mildio: 0,
+        ferrugem: 0,
+        Saudável: 0,
+      },
     });
   }
 
@@ -80,6 +87,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
           nome: response.data.nome,
           access_token: response.data.access_token,
           token_type: response.data.token_type,
+          quantidade_consultas: 0,
+          plants_counts: {
+            potassio: 0,
+            mildio: 0,
+            ferrugem: 0,
+            Saudável: 0,
+          },
         });
 
         userAuthUpdate(response.data, email);

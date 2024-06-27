@@ -1,7 +1,5 @@
 import { ConsultasDTO } from "@dtos/Consultas.DTO";
-import { useAuth } from "@hooks/useAuth";
 import { useNavigation } from "@react-navigation/native";
-import { storageAuthRemove } from "@storage/storageAuthUser";
 import { blobToDataURL } from "blob-util";
 import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -13,11 +11,16 @@ type CardHomeProps = {
   cultura: string;
   img?: string;
   consultasData: ConsultasDTO;
+  onPress?: () => void;
 };
 
-export function CardHome({ data, cultura, img, consultasData }: CardHomeProps) {
-  const { saveConsultas, getConsultas, storageCosultasRemove } = useAuth();
-
+export function CardHome({
+  data,
+  cultura,
+  img,
+  consultasData,
+  onPress,
+}: CardHomeProps) {
   const [image, setImage] = useState("");
   const [error, setError] = useState(false);
   const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -45,7 +48,10 @@ export function CardHome({ data, cultura, img, consultasData }: CardHomeProps) {
   return (
     <Pressable
       className="bg-[#FFFFFF] w-44 h-44 rounded-xl mr-3 flex items-end justify-center"
-      onPress={() => handleOpenConsultas(consultasData)}
+      onPress={() => {
+        onPress && onPress();
+        handleOpenConsultas(consultasData);
+      }}
     >
       {!error ? (
         <Image

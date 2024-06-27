@@ -20,19 +20,53 @@ import { AppError } from "@utils/AppError";
 import Toast from "react-native-toast-message";
 import { useCallback, useState } from "react";
 import { ConsultasDTO } from "@dtos/Consultas.DTO";
-import { storageAuthRemove } from "@storage/storageConsultas";
 
 export function Home() {
-  const { AuthUser, signOut, saveConsultas, getConsultas } = useAuth();
+  const { AuthUser, signOut } = useAuth();
   const [consultas, setConsultas] = useState<ConsultasDTO[]>([]);
   const [recentes, setRecentes] = useState<ConsultasDTO[]>([]);
+
+  function pestOfPlants(doenca: string): string {
+    const translations: Record<string, string> = {
+      "potassium deficiency": "Deficiência de potássio",
+      "downey mildew": "Míldio",
+      ferrugen: "Ferrugem",
+      Healty: "Saudável",
+    };
+    return translations[doenca] || "";
+  }
 
   async function fetchConsultas() {
     try {
       const response = await api.get("/consultas");
-      const consultasRecentes = await getConsultas();
 
-      setRecentes(consultasRecentes);
+      const countConsultas = response.data.length;
+
+      response.data.forEach((consultasSeparandoPorDoença: ConsultasDTO) => {
+        const pest = consultasSeparandoPorDoença.consulta.parametrosretornoia;
+
+        switch (pest) {
+          case "potassium deficiency":
+            AuthUser.plants_counts.potassio++;
+            break;
+          case "downey mildew":
+            AuthUser.plants_counts.mildio++;
+            break;
+          case "ferrugen":
+            AuthUser.plants_counts.ferrugem++;
+            break;
+          case "Healty":
+            AuthUser.plants_counts.Saudável++;
+            break;
+        }
+
+        if (pest)
+          consultasSeparandoPorDoença.consulta.parametrosretornoia =
+            pestOfPlants(pest);
+      });
+
+      AuthUser.quantidade_consultas = countConsultas;
+
       setConsultas(response.data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -52,6 +86,26 @@ export function Home() {
       fetchConsultas();
     }, [])
   );
+
+  function handlePressCard(novaConsulta: ConsultasDTO) {
+    const indice = recentes.findIndex(
+      (c) => c.consulta.idconsulta === novaConsulta.consulta.idconsulta
+    );
+
+    if (indice !== -1) {
+      // Se o objeto existe, remove-o do array e o adiciona na primeira posição
+      const atualizadosRecentes = [
+        novaConsulta,
+        ...recentes.slice(0, indice),
+        ...recentes.slice(indice + 1),
+      ];
+
+      setRecentes(atualizadosRecentes);
+    } else {
+      // Se o objeto não existe, adiciona-o ao final do array
+      setRecentes([...recentes, novaConsulta]);
+    }
+  }
 
   function handleListEmpty() {
     return (
@@ -104,7 +158,7 @@ export function Home() {
                 .join("/")}
               cultura={"Soja"}
               img={item.image.imagem_com_fundo}
-              key={item.consulta.idconsulta}
+              onPress={() => handlePressCard(item)}
               consultasData={item}
             />
           )}
@@ -129,7 +183,6 @@ export function Home() {
                 .join("/")}
               cultura={"Soja"}
               img={item.image.imagem_com_fundo}
-              key={item.consulta.idconsulta}
               consultasData={item}
             />
           )}

@@ -30,6 +30,16 @@ export function CameraPage() {
 
   const [location, setLocation] = useState<LocationObject | null>(null);
 
+  function pestOfPlants(doenca: string): string {
+    const translations: Record<string, string> = {
+      "potassium deficiency": "Deficiência de potássio",
+      "downey mildew": "Míldio",
+      ferrugen: "Ferrugem",
+      Healty: "Saudável",
+    };
+    return translations[doenca] || "";
+  }
+
   useEffect(() => {
     if (locationForegroundPermission) {
       let subscription: LocationSubscription;
@@ -121,6 +131,10 @@ export function CameraPage() {
 
         const { image, consulta } = response.data as ConsultasDTO;
 
+        consulta.parametrosretornoia = pestOfPlants(
+          consulta.parametrosretornoia
+        );
+
         navigation.navigate("details", {
           image: image,
           consulta: consulta,
@@ -181,6 +195,8 @@ export function CameraPage() {
       });
 
       const { image, consulta } = response.data as ConsultasDTO;
+
+      consulta.parametrosretornoia = pestOfPlants(consulta.parametrosretornoia);
 
       navigation.navigate("details", {
         image: image,

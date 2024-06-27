@@ -35,6 +35,16 @@ export function Details() {
     navigation.navigate("home");
   }
 
+  function pestOfPlants(doenca: string): string {
+    const translations: Record<string, string> = {
+      "potassium deficiency": "Deficiência de potássio",
+      "downey mildew": "Míldio",
+      ferrugen: "Ferrugem",
+      Healty: "Saudável",
+    };
+    return translations[doenca] || "";
+  }
+
   useEffect(() => {
     const fetchImages = async () => {
       try {
